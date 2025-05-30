@@ -5,9 +5,10 @@ import Image from 'next/image';
 import test1 from '../../../public/ㅂㄹㅁㄹ.svg';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Swiper as SwiperType } from 'swiper';
 import { useRouter } from 'next/navigation';
+
 
 export default function WeeklyTicke() {
     const [swiper, setSwiper] = useState<SwiperType | null>(null);
@@ -20,16 +21,33 @@ export default function WeeklyTicke() {
         if (swiper) swiper.slideNext();
     };
 
-    const testObj = [
-        { id: '1', url: test1 },
-        { id: '2', url: test1 },
-        { id: '3', url: test1 },
-        { id: '4', url: test1 },
-        { id: '5', url: test1 },
-        { id: '6', url: test1 },
-        { id: '7', url: test1 },
-        { id: '8', url: test1 },
-    ];
+  interface WeeklyTicketDto {
+  id: number;
+  posterUrl: string;
+  round: string;
+  ticketOpenDate: string;
+  concertName: string;
+  concertDate: string;
+  place: string;
+  }
+
+
+  const [testObj, setTestObj] = useState<WeeklyTicketDto[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(process.env.NEXT_PUBLIC_HOT_CONCERT_API as string)
+        const json = await res.json();
+        const concerts = json.result.concertRankedResponseDTOList;
+        setTestObj(concerts);
+      } catch (err) {
+        console.error('API 호출 실패:', err);
+      }
+    };
+
+    fetchData();
+  }, []);
 
     //4개씩 나누기
     const createGroups = () => {
@@ -59,12 +77,15 @@ export default function WeeklyTicke() {
                                         key={item.id}
                                         className="p-[1.38vw] flex bg-white w-[39.93vw] aspect-[575/240] rounded-[20px] border-[1px] border-[rgba(240, 240, 240, 1)] justify-between items-center"
                                     >
-                                        <Image
-                                            src={item.url}
-                                            alt={item.id}
-                                            className="bg-black w-[10.41vw] rounded-[10px] aspect-[3/4]"
-                                        />
-                                        <div className="justify-center items-center">{item.id}</div>
+                                        <div className="relative w-[10.41vw] aspect-[3/4] rounded-[10px] overflow-hidden bg-black">
+                                          <Image
+                                            src={item.posterUrl}
+                                            alt={`poster-${item.id}`}
+                                            fill
+                                            className="object-cover"
+                                          />
+                                        </div>
+                                        <div className="justify-center items-center text-[1.54vw] font-[700]">{item.id}</div>
                                         <div className="w-[20.27vw] flex flex-col justify-between h-[10.9vw]">
                                             <div className="h-[2.64vw] w-fit border-[2px] rounded-[10px] border-primary justify-center flex items-center gap-[0.48vw] p-[0.83vw]">
                                                 <Image src={test1} alt="logo" className="w-[1.38vw] h-[1.38vw]"></Image>
@@ -73,14 +94,17 @@ export default function WeeklyTicke() {
                                                 </span>
                                             </div>
                                             <div className="text-[1.38vw] font-[700] text-primary">
-                                                2025.01.14 (화) 8PM
+                                              {item.ticketOpenDate
+                                                ? item.ticketOpenDate
+                                                : <span className = 'text-gray-400'>'티켓 오픈일이 공개되지 않았어요!'</span>
+                                                }
                                             </div>
                                             <div className="h-[4.86vw]">
-                                                <div className="text-black text-[1.25vw] font-[700] overflow-hidden whitespace-nowrap text-ellipsis">{`j-hope Tour 'HOPE ON THE STAG글자넘는거테스트테스트으으`}</div>
+                                                <div className="text-black text-[1.25vw] font-[700] overflow-hidden whitespace-nowrap text-ellipsis">{item.concertName}</div>
                                                 <div className="text-[1.04vw] font-500 text-[#AEAEAE]">
-                                                    2025.02.28 - 03.02
+                                                    {item.concertDate}
                                                 </div>
-                                                <div className="text-[1.04vw] font-500 text-[#AEAEAE]">KSPO DOME</div>
+                                                <div className="text-[1.04vw] font-500 text-[#AEAEAE]">{item.place}</div>
                                             </div>
                                         </div>
                                     </div>
