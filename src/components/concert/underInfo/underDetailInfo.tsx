@@ -145,6 +145,58 @@ export default function DetailInfo({
         );
     };
 
+    const aboutInfos = [
+        {
+            label: '주변 편의점',
+            content: (
+                <div>
+                    {renderPlaceList(categoryData.stores, selectedStore, setSelectedStore, 'stores')}
+                    {renderSelectedPlaceInfo(selectedStore)}
+                </div>
+            ),
+            mapCenter: selectedStore ? { lat: parseFloat(selectedStore.y), lng: parseFloat(selectedStore.x) } : null,
+        },
+        {
+            label: '오시는 길 - 주차장',
+            content: (
+                <div>
+                    {renderPlaceList(categoryData.parking, selectedParking, setSelectedParking, 'parking')}
+                    {renderSelectedPlaceInfo(selectedParking)}
+                </div>
+            ),
+            mapCenter: selectedParking
+                ? { lat: parseFloat(selectedParking.y), lng: parseFloat(selectedParking.x) }
+                : null,
+        },
+        {
+            label: '오시는 길 - 지하철역',
+            content: (
+                <div>
+                    {renderPlaceList(categoryData.subway, selectedSubway, setSelectedSubway, 'subway')}
+                    {renderSelectedPlaceInfo(selectedSubway)}
+                </div>
+            ),
+            mapCenter: selectedSubway ? { lat: parseFloat(selectedSubway.y), lng: parseFloat(selectedSubway.x) } : null,
+        },
+        {
+            label: '주변 식당',
+            content: (
+                <div>
+                    {renderPlaceList(
+                        categoryData.restaurants,
+                        selectedRestaurant,
+                        setSelectedRestaurant,
+                        'restaurants'
+                    )}
+                    {renderSelectedPlaceInfo(selectedRestaurant)}
+                </div>
+            ),
+            mapCenter: selectedRestaurant
+                ? { lat: parseFloat(selectedRestaurant.y), lng: parseFloat(selectedRestaurant.x) }
+                : null,
+        },
+    ];
+
     return (
         <div className="flex flex-col gap-[1.04vw] p-[2.08vw] w-[62.08vw] border-[#F0F0F0] border-[1.5px] rounded-[20px]">
             <section>
