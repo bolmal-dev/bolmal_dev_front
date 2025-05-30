@@ -91,6 +91,60 @@ export default function DetailInfo({
         enabled: !!location,
     });
 
+    const renderPlaceList = (
+        places: PlaceInfo[],
+        selectedPlace: PlaceInfo | null,
+        onSelect: (place: PlaceInfo) => void,
+        categoryName: string
+    ) => {
+        if (isLoading) {
+            return <p className="text-gray-500">로딩중입니다. 잠시만 기다려주세요!</p>;
+        }
+
+        if (!places || places.length === 0) {
+            return <p className="text-gray-500">주변에 {categoryName} 정보가 없습니다.</p>;
+        }
+
+        return (
+            <div className="space-y-2">
+                {places.map((place, index) => (
+                    <label key={index} className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                            type="radio"
+                            name={categoryName}
+                            checked={selectedPlace?.placeName === place.placeName}
+                            onChange={() => onSelect(place)}
+                            className="w-4 h-4 text-blue-600"
+                        />
+                        <div className="flex-1">
+                            <p className="font-semibold">{place.placeName}</p>
+                            <p className="text-sm text-gray-600">{place.roadAddressName}</p>
+                        </div>
+                    </label>
+                ))}
+            </div>
+        );
+    };
+
+    const renderSelectedPlaceInfo = (place: PlaceInfo | null) => {
+        if (!place) return null;
+
+        return (
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <h4 className="font-bold text-lg">{place.placeName}</h4>
+                <p className="text-gray-700">{place.roadAddressName}</p>
+                <a
+                    href={place.placeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline text-sm"
+                >
+                    카카오맵에서 보기 →
+                </a>
+            </div>
+        );
+    };
+
     return (
         <div className="flex flex-col gap-[1.04vw] p-[2.08vw] w-[62.08vw] border-[#F0F0F0] border-[1.5px] rounded-[20px]">
             <section>
