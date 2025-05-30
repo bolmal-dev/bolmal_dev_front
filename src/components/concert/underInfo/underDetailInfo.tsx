@@ -51,22 +51,45 @@ export default function DetailInfo({
         { label: '예매 제한', value: ticketLimit || '' },
     ]);
 
-    const [aboutInfos, setAboutInfos] = useState([
-        { label: '오시는 길', value: '로딩중입니다. 잠시만 기다려주세요!' },
-        { label: '주변 편의점', value: '로딩중입니다. 잠시만 기다려주세요!' },
-        { label: '주변 맛집', value: '로딩중입니다. 잠시만 기다려주세요!' },
-        { label: '숙박 시설', value: '로딩중입니다. 잠시만 기다려주세요!' },
-    ]);
-
-    const { data } = useQuery({
-        queryKey: ['map-search'],
-        queryFn: async () => {
-            const response = await fetchInstance(`/kakao-map/search/fixed?keyword=${location}`, {}, false);
-            return response[0].result;
-        },
+    const [categoryData, setCategoryData] = useState<CategoryData>({
+        stores: [],
+        parking: [],
+        subway: [],
+        restaurants: [],
     });
 
-    console.log(data);
+    const [selectedStore, setSelectedStore] = useState<PlaceInfo | null>(null);
+    const [selectedParking, setSelectedParking] = useState<PlaceInfo | null>(null);
+    const [selectedSubway, setSelectedSubway] = useState<PlaceInfo | null>(null);
+    const [selectedRestaurant, setSelectedRestaurant] = useState<PlaceInfo | null>(null);
+
+    const { data, isLoading } = useQuery({
+        queryKey: ['map-search', location],
+        queryFn: async () => {
+            const response = await fetchInstance(`/kakao-map/search/fixed?keyword=${location}`, {}, false);
+
+            const stores = response[0]?.result || [];
+            const parking = response[1]?.result || [];
+            const subway = response[2]?.result || [];
+            const restaurants = response[3]?.result || [];
+
+            setCategoryData({
+                stores,
+                parking,
+                subway,
+                restaurants,
+            });
+
+            // 각 카테고리의 첫 번째 항목을 기본 선택
+            setSelectedStore(stores[0] || null);
+            setSelectedParking(parking[0] || null);
+            setSelectedSubway(subway[0] || null);
+            setSelectedRestaurant(restaurants[0] || null);
+
+            return { stores, parking, subway, restaurants };
+        },
+        enabled: !!location,
+    });
 
     return (
         <div className="flex flex-col gap-[1.04vw] p-[2.08vw] w-[62.08vw] border-[#F0F0F0] border-[1.5px] rounded-[20px]">
@@ -79,17 +102,33 @@ export default function DetailInfo({
                     ))}
                 </div>
             </section>
+
             <div className="flex flex-col gap-[1.04vw]">
                 <h3 className="font-[700] text-[1.38vw]">공연 소개</h3>
                 <hr />
                 <p className="whitespace-pre-line mt-[1.04vw] font-[600] text-[1.25vw]">{description}</p>
             </div>
-            {aboutInfos.map((item) => (
-                <div className="flex flex-col gap-[1.04vw]">
+
+            {aboutInfos.map((item, index) => (
+                <div key={index} className="flex flex-col gap-[1.04vw]">
                     <h3 className="font-[700] text-[1.38vw]">{item.label}</h3>
                     <hr />
-                    <p className="whitespace-pre-line my-[1.04vw] font-[600] text-[1.25vw]">{item.value}</p>
-                    <KakaoMap />
+                    <div className="my-[1.04vw] font-[600] text-[1.25vw]">{item.content}</div>
+                    <div className="h-[300px] w-full">
+                        {item.mapCenter ? (
+                            <KakaoMap
+                                x={item.mapCenter.lat}
+                                y={item.mapCenter.lng}
+                                width="100%"
+                                height="300px"
+                                level={3}
+                            />
+                        ) : (
+                            <div className="w-full h-[300px] bg-gray-100 flex items-center justify-center rounded-lg">
+                                <p className="text-gray-500">지도를 불러올 수 없습니다.</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             ))}
         </div>
