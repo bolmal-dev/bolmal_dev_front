@@ -127,7 +127,7 @@ export default function LoginForm() {
     return (
         <div className="flex flex-col justify-center items-center">
             <form className="flex flex-col" onSubmit={handleSubmit(onValid, onInValid)}>
-                <div className="flex flex-col gap-[1.041vw]">
+                <div className="flex flex-col gap-[15px]">
                     <input
                         {...register('id', {
                             required: true,
@@ -136,27 +136,25 @@ export default function LoginForm() {
                         })}
                         placeholder="아이디"
                         type="text"
-                        className="bg-bg-default w-[33.07vw] h-[4.44vw] rounded-[20px] border-[1px]"
+                        className="bg-bg-default w-[476px] h-[64px] rounded-[20px] border-[1px]"
                     />
                     <input
                         {...register('password', { required: true, minLength: 8, maxLength: 16 })}
                         placeholder="비밀번호"
                         type="password"
-                        className="bg-bg-default w-[33.07vw] h-[4.44vw] rounded-[20px] border-[1px]"
+                        className="bg-bg-default w-[476px] h-[64px] rounded-[20px] border-[1px]"
                     />
                 </div>
-                <div className="flex flex-row gap-[0.14vw] my-[1.5vw]">
+                <div className="flex flex-row gap-[2px] my-[22px]">
                     <input type="checkbox" />
                     <div className="flex flex-row w-full justify-between">
                         <p>아이디 저장</p>
-                        {errors.password && (
-                            <p className="text-red-500 text-sm mt-[0.07vw]">{errors.password.message}</p>
-                        )}
+                        {errors.password && <p className="text-red-500 text-sm mt-[1px]">{errors.password.message}</p>}
                     </div>
                 </div>
                 <Button size="large">로그인</Button>
             </form>
-            <div className="flex flex-row gap-[0.4vw] mt-[0.69vw]">
+            <div className="flex flex-row gap-[6px] mt-[10px]">
                 <button className="text-[#686868]">아이디 찾기</button>
                 <p className="text-[#C7C7C7]">|</p>
                 <button className="text-[#686868]">비밀번호 찾기</button>
@@ -165,7 +163,7 @@ export default function LoginForm() {
                     회원가입
                 </button>
             </div>
-            <div className="mt-[2.3vh]">
+            <div className="mt-[33px]">
                 <KakaoLogin></KakaoLogin>
             </div>
         </div>
