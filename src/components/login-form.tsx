@@ -136,13 +136,13 @@ export default function LoginForm() {
                         })}
                         placeholder="아이디"
                         type="text"
-                        className="bg-bg-default w-[476px] h-[64px] rounded-[20px] border-[1px]"
+                        className="bg-bg-default w-[476px] h-[64px] rounded-[20px] border-[1px] placeholder:pl-[15px]"
                     />
                     <input
                         {...register('password', { required: true, minLength: 8, maxLength: 16 })}
                         placeholder="비밀번호"
                         type="password"
-                        className="bg-bg-default w-[476px] h-[64px] rounded-[20px] border-[1px]"
+                        className="bg-bg-default w-[476px] h-[64px] rounded-[20px] border-[1px] placeholder:pl-[15px]"
                     />
                 </div>
                 <div className="flex flex-row gap-[2px] my-[22px]">
