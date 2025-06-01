@@ -7,7 +7,6 @@ import { useStore } from '@/hooks/useUserInfo';
 import { useEffect, useState } from 'react';
 import KakaoLogin from './kakao-login';
 import { fetchInstance } from '@/utils/fetchInstance';
-import { getAccessToken } from '@/utils/auth/refresh';
 
 interface LoginResponse {
     code: string;
@@ -166,9 +165,8 @@ export default function LoginForm() {
                     회원가입
                 </button>
             </div>
-            <div>
+            <div className="mt-[2.3vh]">
                 <KakaoLogin></KakaoLogin>
-                <button>네이버</button>
             </div>
         </div>
     );

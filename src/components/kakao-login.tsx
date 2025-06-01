@@ -3,8 +3,10 @@
 import useKakaoLogin from '@/hooks/useKakaoLogin';
 import { useStore } from '@/hooks/useUserInfo';
 import { signIn, useSession } from 'next-auth/react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import kakao from '../../public/kakao.svg';
 
 export default function KakaoLogin() {
     const { data: session } = useSession();
@@ -28,8 +30,8 @@ export default function KakaoLogin() {
     };
 
     return (
-        <button onClick={loginKakao} className="bg-yellow-400">
-            💬 카카오
-        </button>
+        <div onClick={loginKakao}>
+            <Image width={54} height={54} src={kakao} alt="카카오 로그인" />
+        </div>
     );
 }
