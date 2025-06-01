@@ -40,7 +40,7 @@ export default function WeeklyTicke() {
     return res.result.concertRankedResponseDTOList;
   };
 
-  const { data: testObj = [], isLoading, isError } = useQuery({
+  const { data: weeklyObj = [], isLoading, isError } = useQuery({
     queryKey: ['weeklyTickets'],
     queryFn: fetchWeeklyTickets,
     
@@ -51,8 +51,8 @@ export default function WeeklyTicke() {
     //4개씩 나누기
     const createGroups = () => {
         const groups = [];
-        for (let i = 0; i < testObj.length; i += 4) {
-            groups.push(testObj.slice(i, i + 4));
+        for (let i = 0; i < weeklyObj.length; i += 4) {
+            groups.push(weeklyObj.slice(i, i + 4));
         }
         return groups;
     };
