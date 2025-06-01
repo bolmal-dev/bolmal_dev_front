@@ -108,13 +108,13 @@ export default function DetailInfo({
         return (
             <div className="space-y-2">
                 {places.map((place, index) => (
-                    <label key={index} className="flex items-center space-x-2 cursor-pointer">
+                    <label key={index} className="flex items-start space-x-2 cursor-pointer">
                         <input
                             type="radio"
                             name={categoryName}
                             checked={selectedPlace?.placeName === place.placeName}
                             onChange={() => onSelect(place)}
-                            className="w-4 h-4 text-blue-600"
+                            className="w-4 h-4 mt-[0.3em] text-blue-600"
                         />
                         <div className="flex-1">
                             <p className="font-semibold">{place.placeName}</p>
