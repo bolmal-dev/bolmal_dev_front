@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export type SortType = 'LATEST' | 'TICKET_OPEN' | 'POPULAR';
+export type SortType = 'LATEST' | 'TICKET_OPEN';
 
 export default function ConcertPage() {
     const [pageNumber, setPageNumber] = useState<number>(0);

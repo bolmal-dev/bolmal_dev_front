@@ -13,7 +13,6 @@ export default function DropDown({ sortType, setSortType }: DropDownProps) {
 
     const sortTypeText = {
         TICKET_OPEN: '티켓오픈 가까운 순',
-        POPULAR: '인기순',
         LATEST: '최신 등록순',
     };
 
@@ -43,20 +42,6 @@ export default function DropDown({ sortType, setSortType }: DropDownProps) {
                                 }}
                             >
                                 티켓오픈 가까운 순
-                            </button>
-                        </li>
-                        <li className="flex justify-center">
-                            <button
-                                className={`flex items-center justify-center h-[36px] bg-primary rounded-[7px] w-[9.93vw] font-[700] text-[15px] ${
-                                    sortType === 'POPULAR' ? 'bg-primary text-white' : 'bg-white text-primary'
-                                }`}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setSortType('POPULAR');
-                                    setView(false);
-                                }}
-                            >
-                                인기순
                             </button>
                         </li>
                         <li className="flex justify-center">
