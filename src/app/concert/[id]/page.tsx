@@ -96,7 +96,7 @@ export default function ConcertDetail() {
           const formatted = Number(onlyDigits).toLocaleString('ko-KR');
           const priceFormatted = priceRaw.includes('원') ? priceRaw : `${formatted},000원`;
 
-          // ✅ label이 type 또는 additionalProp1일 때는 라벨 없이 출력
+          // label이 type 또는 additionalProp1일 때는 라벨 없이 출력
           if (label === 'type' || label === 'additionalProp1') return priceFormatted;
 
           return `${label}: ${priceFormatted}`;
