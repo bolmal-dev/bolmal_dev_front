@@ -39,7 +39,7 @@ export default function ConcertDetail() {
                     concertPlace: response.result.concertPlace,
                     concertDate: response.result.concertDate,
                     concertRuntime: response.result.concertRuntime,
-                    price: response.result.price,
+                    price: parseAllTicketPrices(response.result.price), // 변경: parseAllTicketPrices 함수 사용
                     onlineStore: response.result.onlineStore,
                     onlineStoreURL: response.result.onlineStoreURL,
                     concertAge: response.result.concertAge,
@@ -76,6 +76,35 @@ export default function ConcertDetail() {
       });
     }
 
+    function parseAllTicketPrices(raw: string | null | undefined): string {
+      if (!raw) return '해당 정보를 찾을 수 없어요';
+
+      const matches = raw.match(/[^:,]+:\s*[^:,]+/g);
+      if (!matches) return '해당 정보를 찾을 수 없어요';
+
+      return matches
+        .map(entry => {
+          const parts = entry.split(':');
+          const label = parts[0]?.trim();
+          const priceRaw = parts[1]?.trim();
+
+          if (!priceRaw) return null;
+
+          const onlyDigits = priceRaw.replace(/[^0-9]/g, '');
+          if (!onlyDigits) return null;
+
+          const formatted = Number(onlyDigits).toLocaleString('ko-KR');
+          const priceFormatted = priceRaw.includes('원') ? priceRaw : `${formatted},000원`;
+
+          // ✅ label이 type 또는 additionalProp1일 때는 라벨 없이 출력
+          if (label === 'type' || label === 'additionalProp1') return priceFormatted;
+
+          return `${label}: ${priceFormatted}`;
+        })
+        .filter((price): price is string => Boolean(price))
+        .join(' / ');
+    }
+
     // 설명 텍스트 더미 데이터 (API에 없지만 UI에 필요하여 일단 추가)
     const description =
         '- 공연 상세 정보입니다.\n- 추가 정보는 추후 업데이트될 예정입니다.\n- 자세한 사항은 공식 홈페이지를 참고하세요.';
@@ -92,7 +121,7 @@ export default function ConcertDetail() {
                             location={concertInfo.concertPlace}
                             date={concertInfo.concertDate}
                             runningTime={concertInfo.concertRuntime}
-                            price={concertInfo.price}
+                            price={concertInfo.price || '해당 정보를 찾을 수 없어요'}
                             posterUrl={concertInfo.posterUrl || test1}
                         />
                     </>
@@ -109,7 +138,7 @@ export default function ConcertDetail() {
                             fullTitle={concertInfo?.concertName}
                             date={concertInfo?.concertDate}
                             location={concertInfo?.concertPlace}
-                            price={concertInfo?.price}
+                            price={concertInfo?.price || '해당 정보를 찾을 수 없어요'}
                             runningTime={concertInfo?.concertRuntime}
                             ageLimit={concertInfo?.concertAge || '연령 제한 없음'}
                             ticketLimit={concertInfo?.viewingRestrict}
