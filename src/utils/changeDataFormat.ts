@@ -19,3 +19,31 @@ export const getFormattedData = (dateString: string) => {
 
     return `${year}.${month}.${day} (${weekday}) ${hours}${ampm}`;
 };
+
+export function formatTicketOpenDate(datetimeStr: string): string {
+  const date = new Date(datetimeStr);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+  const hour24 = date.getHours();
+  const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
+  const period = hour24 < 12 ? 'AM' : 'PM';
+
+  return `1차 티켓오픈 ${year}.${month}.${day} (${dayOfWeek}) ${hour12}${period}`;
+}
+
+export function formatConcertDate(datetimeStr: string): string {
+  const safeStr = datetimeStr.replace(/\./g, '-'); // 점(.)을 대시(-)로 교체
+  const date = new Date(safeStr);
+
+  if (isNaN(date.getTime())) return '공연일 미정';
+
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const weekday = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+  const hour = date.getHours();
+
+  return `${year}.${month.toString().padStart(2, '0')}.${day.toString().padStart(2, '0')} (${weekday})`;
+}

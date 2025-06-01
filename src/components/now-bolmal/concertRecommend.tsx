@@ -76,7 +76,7 @@ export default function ConcertRecommend({ isLoggedIn }: RecommendSwiperProps) {
                     {concerts.map((concert) => (
                         <SwiperSlide key={concert.id} className="w-[20%] !flex !justify-center">
                             <div onClick={() => router.push(`concert/${concert.id}`)} className="w-[16.25vw] p-[15px]">
-                                <Ticket concert={concert}></Ticket>
+                                <Ticket concert={{...concert}}/>
                             </div>
                         </SwiperSlide>
                     ))}
