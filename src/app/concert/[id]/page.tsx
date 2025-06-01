@@ -120,7 +120,9 @@ export default function ConcertDetail() {
                     <div>로딩 중...</div>
                 )}
             </div>
-            <Profile></Profile>
+            <div className="mt-[1.94vw]">
+                <Profile />
+            </div>
         </div>
     );
 }

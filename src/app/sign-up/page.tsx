@@ -247,7 +247,7 @@ export default function SignUp() {
                         />
                     </div>
                 </div>
-                <div className="w-[500px]">
+                {/* <div className="w-[500px]">
                     <p className="font-[600] text-[20px]">휴대폰 번호</p>
                     <div className="flex flex-row gap-2">
                         <div className="w-full flex justify-between">
@@ -266,7 +266,7 @@ export default function SignUp() {
                             <Button size="small">인증하기</Button>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <Button size="large">회원가입 완료</Button>
             </form>
         </div>
