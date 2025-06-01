@@ -12,7 +12,7 @@ import Profile from '@/components/profile/profile';
 export interface ConcertDetail {
     id: number;
     concertName: string;
-    ticketOpenInfo: string[]; // 변경: string[]로 수정
+    ticketOpenInfo: string; // 변경: string[]에서 string으로 수정
     concertPlace: string;
     concertDate: string;
     concertRuntime: string;
@@ -53,27 +53,25 @@ export default function ConcertDetail() {
         getConcertInfo();
     }, [id]);
 
-    function parseTicketOpenInfo(raw: string): string[] {
-      const entries = raw.split(',').map(entry => entry.trim());
-      return entries.map((entry, index) => {
-        const labelMatch = entry.match(/^(.+?)\((.+?)\)$/);
-        if (!labelMatch) return entry;
+    function parseTicketOpenInfo(raw: string): string {
+      const entry = raw.split(',')[0]?.trim();
+      const labelMatch = entry.match(/^(.+?)\((.+?)\)$/);
+      if (!labelMatch) return entry;
 
-        const [_, label, datetimeStr] = labelMatch;
-        const date = new Date(datetimeStr);
+      const [_, label, datetimeStr] = labelMatch;
+      const date = new Date(datetimeStr);
 
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
 
-        const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
-        const hours = date.getHours();
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        const period = hours < 12 ? '오전' : '오후';
-        const hour12 = hours % 12 === 0 ? 12 : hours % 12;
+      const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+      const hours = date.getHours();
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const period = hours < 12 ? '오전' : '오후';
+      const hour12 = hours % 12 === 0 ? 12 : hours % 12;
 
-        return `${index + 1}차 티켓오픈 ${year}.${month}.${day} (${dayOfWeek}) ${period} ${hour12}시`;
-      });
+      return `1차 티켓오픈 ${year}.${month}.${day} (${dayOfWeek}) ${period} ${hour12}시`;
     }
 
     function parseAllTicketPrices(raw: string | null | undefined): string {
@@ -117,7 +115,7 @@ export default function ConcertDetail() {
                         <MainInfo
                             tag={concertInfo.onlineStore === 'INTERPARK' ? '내한 콘서트' : '국내 콘서트'}
                             title={concertInfo.concertName}
-                            nextTicketOpen={concertInfo.ticketOpenInfo}
+                            nextTicketOpen={[concertInfo.ticketOpenInfo]}
                             location={concertInfo.concertPlace}
                             date={concertInfo.concertDate}
                             runningTime={concertInfo.concertRuntime}

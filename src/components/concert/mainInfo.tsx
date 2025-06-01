@@ -58,8 +58,8 @@ export default function MainInfo({
                         <span>{runningTime}</span>
                     </div>
                     <div className="flex gap-[1.38vw] h-[1.52vw]">
-                        <span className="text-[#919191]">🎫 티켓가격</span>
-                        <span>{price}</span>
+                        <span className="text-[#919191] whitespace-nowrap">🎫 티켓가격</span>
+                        <span className = "line-clamp-1">{price}</span>
                     </div>
                 </div>
             </div>
