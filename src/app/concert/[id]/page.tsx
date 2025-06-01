@@ -72,7 +72,7 @@ export default function ConcertDetail() {
         const period = hours < 12 ? '오전' : '오후';
         const hour12 = hours % 12 === 0 ? 12 : hours % 12;
 
-        return `${index + 1}차 티켓오픈 ${year}.${month}.${day} (${dayOfWeek}) ${period} ${hour12}시\n`;
+        return `${index + 1}차 티켓오픈 ${year}.${month}.${day} (${dayOfWeek}) ${period} ${hour12}시`;
       });
     }
 

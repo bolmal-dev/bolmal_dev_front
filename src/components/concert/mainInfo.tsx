@@ -38,7 +38,9 @@ export default function MainInfo({
                         <span className="mb-[0.69vw] font-[700] text-[1.73vw]">{title}</span>
                         <div className="text-primary text-[1.38vw] font-[700]">
                             <span></span>
-                            <span>{nextTicketOpen}</span>
+                            {nextTicketOpen.map((line, idx) => (
+                              <div key={idx}>{line}</div>
+                            ))}
                         </div>
                     </div>
                 </div>
