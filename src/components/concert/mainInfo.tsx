@@ -3,7 +3,7 @@ import Image from 'next/image';
 interface MainInfoProps {
     tag: string;
     title: string;
-    nextTicketOpen: string;
+    nextTicketOpen: string[];
     location: string;
     date: string;
     runningTime: string;

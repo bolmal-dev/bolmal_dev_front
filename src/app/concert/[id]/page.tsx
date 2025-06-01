@@ -12,7 +12,7 @@ import Profile from '@/components/profile/profile';
 export interface ConcertDetail {
     id: number;
     concertName: string;
-    ticketOpenInfo: string;
+    ticketOpenInfo: string[]; // 변경: string[]로 수정
     concertPlace: string;
     concertDate: string;
     concertRuntime: string;
@@ -35,7 +35,7 @@ export default function ConcertDetail() {
                 setConcertInfo({
                     id: response.result.id,
                     concertName: response.result.concertName,
-                    ticketOpenInfo: response.result.ticketOpenInfo,
+                    ticketOpenInfo: parseTicketOpenInfo(response.result.ticketOpenInfo), // 변경: parseTicketOpenInfo 함수 사용
                     concertPlace: response.result.concertPlace,
                     concertDate: response.result.concertDate,
                     concertRuntime: response.result.concertRuntime,
@@ -52,6 +52,29 @@ export default function ConcertDetail() {
         };
         getConcertInfo();
     }, [id]);
+
+    function parseTicketOpenInfo(raw: string): string[] {
+      const entries = raw.split(',').map(entry => entry.trim());
+      return entries.map((entry, index) => {
+        const labelMatch = entry.match(/^(.+?)\((.+?)\)$/);
+        if (!labelMatch) return entry;
+
+        const [_, label, datetimeStr] = labelMatch;
+        const date = new Date(datetimeStr);
+
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+
+        const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+        const hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const period = hours < 12 ? '오전' : '오후';
+        const hour12 = hours % 12 === 0 ? 12 : hours % 12;
+
+        return `${index + 1}차 티켓오픈 ${year}.${month}.${day} (${dayOfWeek}) ${period} ${hour12}시\n`;
+      });
+    }
 
     // 설명 텍스트 더미 데이터 (API에 없지만 UI에 필요하여 일단 추가)
     const description =
