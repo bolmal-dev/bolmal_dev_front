@@ -8,6 +8,8 @@ import 'swiper/css/navigation';
 import { useState, useEffect } from 'react';
 import { Swiper as SwiperType } from 'swiper';
 import { useRouter } from 'next/navigation';
+import { fetchInstance } from '@/utils/fetchInstance';
+import { useQuery } from '@tanstack/react-query';
 
 
 export default function WeeklyTicke() {
@@ -31,24 +33,21 @@ export default function WeeklyTicke() {
   place: string;
   }
 
+  // WeeklyTicketDto는 그대로 사용
 
-  const [testObj, setTestObj] = useState<WeeklyTicketDto[]>([]);
+  const fetchWeeklyTickets = async (): Promise<WeeklyTicketDto[]> => {
+    const res = await fetchInstance(`/home/hot`, {}, false);
+    return res.result.concertRankedResponseDTOList;
+  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(process.env.NEXT_PUBLIC_HOT_CONCERT_API as string)
-        const json = await res.json();
-        const concerts = json.result.concertRankedResponseDTOList;
-        setTestObj(concerts);
-      } catch (err) {
-        console.error('API 호출 실패:', err);
-      }
-    };
+  const { data: testObj = [], isLoading, isError } = useQuery({
+    queryKey: ['weeklyTickets'],
+    queryFn: fetchWeeklyTickets,
+    
+  });
 
-    fetchData();
-  }, []);
-
+  if (isLoading) return <div>로딩 중입니다...</div>;
+  if (isError) return <div>데이터 로드 실패</div>;
     //4개씩 나누기
     const createGroups = () => {
         const groups = [];
