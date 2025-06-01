@@ -41,7 +41,7 @@ export default function DetailInfo({
     ticketLimit,
     description,
 }: DetailInfoProps) {
-    const [infoItems, setInfoItems] = useState<UnderInfoItemProps[]>([
+    const infoItems = [
         { label: '공연 제목', value: fullTitle || '' },
         { label: '공연 일시', value: date || '' },
         { label: '공연 장소', value: location || '' },
@@ -49,7 +49,7 @@ export default function DetailInfo({
         { label: '러닝 타임', value: runningTime || '' },
         { label: '관람 연령', value: ageLimit || '' },
         { label: '예매 제한', value: ticketLimit || '' },
-    ]);
+    ];
 
     const [categoryData, setCategoryData] = useState<CategoryData>({
         stores: [],
