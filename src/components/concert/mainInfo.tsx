@@ -24,11 +24,9 @@ export default function MainInfo({
     return (
         <div className="flex">
             {posterUrl && (
-                <Image
-                    src={posterUrl}
-                    alt="공연포스터"
-                    className="w-[19.44vw] aspect-[280/392] rounded-[10px] bg-black mr-[1.66vw]"
-                ></Image>
+                <div className="relative w-[19.44vw] aspect-[280/392] rounded-[10px] bg-black mr-[1.66vw] overflow-hidden">
+                    <Image fill src={posterUrl} alt="공연포스터" className="object-cover" />
+                </div>
             )}
 
             <div className="h-[27.22vw] w-[40.83vw] border-[#F0F0F0] border-[1.5px] rounded-[20px] p-[1.38vw] flex flex-col justify-between">

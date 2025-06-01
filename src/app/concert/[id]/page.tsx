@@ -21,6 +21,7 @@ export interface ConcertDetail {
     onlineStoreURL: string;
     concertAge: string;
     viewingRestrict: string;
+    posterUrl: string;
 }
 
 export default function ConcertDetail() {
@@ -43,6 +44,7 @@ export default function ConcertDetail() {
                     onlineStoreURL: response.result.onlineStoreURL,
                     concertAge: response.result.concertAge,
                     viewingRestrict: response.result.viewingRestrict,
+                    posterUrl: response.result.posterUrl,
                 });
             } catch (error) {
                 console.error(error);
@@ -68,7 +70,7 @@ export default function ConcertDetail() {
                             date={concertInfo.concertDate}
                             runningTime={concertInfo.concertRuntime}
                             price={concertInfo.price}
-                            posterUrl={test1}
+                            posterUrl={concertInfo.posterUrl || test1}
                         />
                     </>
                 ) : (
