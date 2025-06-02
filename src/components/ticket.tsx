@@ -9,9 +9,6 @@ interface TicketProps {
 }
 
 export default function Ticket({ concert }: TicketProps) {
-  useEffect(() => {
-  console.log('concertDate:', concert.concertDate);
-}, []);
     return (
         <div className="flex flex-col items-center">
             <Image
