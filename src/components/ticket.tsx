@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import { Concert } from './now-bolmal/concertRecommend';
 import { getFormattedData } from '@/utils/changeDataFormat';
-import { formatTicketOpenDate, formatConcertDate } from '@/utils/changeDataFormat';
+import {formatConcertDate } from '@/utils/changeDataFormat';
+import { useEffect } from 'react';
 
 interface TicketProps {
     concert: Concert;
@@ -26,7 +27,7 @@ export default function Ticket({ concert }: TicketProps) {
                     </div>
                 </div>
                 <span className="mb-[6px] text-[1.38vw] font-[700] text-primary">
-                    {concert.ticketOpenDate ? formatTicketOpenDate(concert.ticketOpenDate) : '티켓 오픈일 미정'}
+                    {concert.ticketOpenDate ? getFormattedData(concert.ticketOpenDate) : '티켓 오픈일 미정'}
                 </span>
                 <span className="text-black text-[1.25vw] font-[700] overflow-hidden whitespace-nowrap text-ellipsis">
                     {concert.concertName} // 여기도 수정하면 내비상으로 콘서트에 있는 내용들은 잘 변경되는데 그걸 가져다가 쓰는 홈에 "지금, 볼래말래?"에 있는 내용에는 내용이 깨져서 들어감.

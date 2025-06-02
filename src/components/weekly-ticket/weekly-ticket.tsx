@@ -10,7 +10,7 @@ import { Swiper as SwiperType } from 'swiper';
 import { useRouter } from 'next/navigation';
 import { fetchInstance } from '@/utils/fetchInstance';
 import { useQuery } from '@tanstack/react-query';
-import { formatTicketOpenDate, formatConcertDate } from '@/utils/changeDataFormat';
+import { getFormattedData, formatConcertDate } from '@/utils/changeDataFormat';
 
 
 export default function WeeklyTicke() {
@@ -95,14 +95,14 @@ export default function WeeklyTicke() {
                                             </div>
                                             <div className="text-[1.38vw] font-[700] text-primary">
                                               {item.ticketOpenDate
-                                                ? formatTicketOpenDate(item.ticketOpenDate)
+                                                ? getFormattedData(item.ticketOpenDate)
                                                 : <span className='text-gray-400'>티켓 오픈일이 공개되지 않았어요!</span>
                                               }
                                             </div>
                                             <div className="h-[4.86vw]">
                                                 <div className="text-black text-[1.25vw] font-[700] overflow-hidden whitespace-nowrap text-ellipsis">{item.concertName}</div>
                                                 <div className="text-[#AEAEAE] text-[1.04vw] font-[500]">
-                                                  {item.concertDate ? formatConcertDate(item.concertDate) : '공연일 미정'}
+                                                  {item.concertDate ? getFormattedData(item.concertDate) : '공연일 미정'}
                                                 </div>
                                                 <div className="text-[1.04vw] font-500 text-[#AEAEAE]">{item.place}</div>
                                             </div>
