@@ -31,7 +31,7 @@ export default function ProfileLogin({ userInfo }: { userInfo: UserInfo }) {
                         <Image src={defaultImg} alt="타임어택" className="w-[1.38vw] h-[1.38vw] mr-[0.62vw]"></Image>
                         <span className="text-[1.04vw] font-[500]">다가오는 티켓팅</span>
                     </div>
-                    {userInfo.onComming !== '' ? (
+                    {userInfo.onComming !== 'test' || '' ? (
                         <span className="font-[700] text-[1.04vw]">{userInfo.onComming}전</span>
                     ) : (
                         <span className="font-[700] text-[1.04vw]">없음</span>
