@@ -41,7 +41,7 @@ const fetchSearchResults = async (query: string): Promise<Concert[]> => {
 
         return jsonData.result?.concertInfoDTOList || [];
     } catch (error) {
-        console.error('검색 API 에러:', error); // 디버깅용
+        console.error('검색 API 에러:', error);
         throw error;
     }
 };
@@ -55,9 +55,9 @@ export default function SearchResults({ searchQuery }: SearchResultsProps) {
     } = useQuery({
         queryKey: ['searchConcerts', searchQuery],
         queryFn: () => fetchSearchResults(searchQuery),
-        enabled: !!searchQuery?.trim(), // 검색어가 있을 때만 실행
+        enabled: !!searchQuery?.trim(),
         retry: 1,
-        staleTime: 5 * 60 * 1000, // 5분간 캐시
+        staleTime: 5 * 60 * 1000,
     });
 
     const router = useRouter();
@@ -77,7 +77,6 @@ export default function SearchResults({ searchQuery }: SearchResultsProps) {
                     ⚠️ {error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.'}
                 </div>
                 <div className="text-gray-500">다른 키워드로 다시 시도해보세요.</div>
-                {/* 디버깅용 - 개발 환경에서만 표시 */}
                 {process.env.NODE_ENV === 'development' && (
                     <details className="mt-4 text-sm">
                         <summary className="cursor-pointer text-gray-400">에러 상세 정보</summary>
@@ -123,9 +122,12 @@ export default function SearchResults({ searchQuery }: SearchResultsProps) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 justify-items-center">
                 {concerts.map((concert) => (
-                    <div onClick={() => router.push(`concert/${concert.id}`)}>
+                    <div
+                        key={concert.id}
+                        onClick={() => router.push(`/concert/${concert.id}`)}
+                        className="cursor-pointer hover:scale-105 transition-transform duration-200"
+                    >
                         <Ticket
-                            key={concert.id}
                             concert={{
                                 ...concert,
                                 round:

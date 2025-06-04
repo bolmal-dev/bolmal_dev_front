@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface SearchInputProps {
@@ -11,6 +11,10 @@ interface SearchInputProps {
 export default function Search({ onSearch, initialValue = '' }: SearchInputProps) {
     const [searchTerm, setSearchTerm] = useState(initialValue);
     const router = useRouter();
+
+    useEffect(() => {
+        setSearchTerm(initialValue);
+    }, [initialValue]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -30,10 +34,6 @@ export default function Search({ onSearch, initialValue = '' }: SearchInputProps
             handleSubmit(e);
         }
     };
-
-    useState(() => {
-        setSearchTerm(initialValue);
-    });
 
     return (
         <form onSubmit={handleSubmit} className="relative">
