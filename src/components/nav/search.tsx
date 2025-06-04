@@ -26,7 +26,7 @@ export default function Search({ onSearch }: SearchInputProps) {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyPress}
                 placeholder="공연명을 검색하세요"
                 className="w-[27.77vw] h-[3.7vh] rounded-[100px] bg-bg-default focus:outline-none focus:border-primary border-[1px] border-transparent pl-[10px] pr-[50px] placeholder:text-gray-400 text-[15px]"
             />
