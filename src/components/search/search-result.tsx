@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import Ticket from '../ticket';
+import { fetchInstance } from '@/utils/fetchInstance';
+import { useRouter } from 'next/navigation';
 
 export interface Concert {
     id: number;
@@ -23,49 +25,44 @@ interface SearchResultsProps {
     searchQuery: string;
 }
 
-export default function SearchResults({ searchQuery }: SearchResultsProps) {
-    const [concerts, setConcerts] = useState<Concert[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+const fetchSearchResults = async (query: string): Promise<Concert[]> => {
+    if (!query.trim()) {
+        return [];
+    }
 
-    useEffect(() => {
-        if (!searchQuery) {
-            setConcerts([]);
-            return;
+    try {
+        const data = await fetchInstance(`/concerts/search/names?keyword=${encodeURIComponent(query)}`, {}, false);
+
+        const jsonData = data as SearchResponse;
+
+        if (!jsonData || !jsonData.isSuccess) {
+            throw new Error(jsonData?.message || '검색에 실패했습니다.');
         }
 
-        const fetchSearchResults = async () => {
-            setLoading(true);
-            setError(null);
+        return jsonData.result?.concertInfoDTOList || [];
+    } catch (error) {
+        console.error('검색 API 에러:', error); // 디버깅용
+        throw error;
+    }
+};
 
-            try {
-                const response = await fetch(
-                    `https://www.bolmal.shop/concerts/search/names?${encodeURIComponent(searchQuery)}`
-                );
+export default function SearchResults({ searchQuery }: SearchResultsProps) {
+    const {
+        data: concerts = [],
+        isLoading,
+        isError,
+        error,
+    } = useQuery({
+        queryKey: ['searchConcerts', searchQuery],
+        queryFn: () => fetchSearchResults(searchQuery),
+        enabled: !!searchQuery?.trim(), // 검색어가 있을 때만 실행
+        retry: 1,
+        staleTime: 5 * 60 * 1000, // 5분간 캐시
+    });
 
-                if (!response.ok) {
-                    throw new Error('검색 결과를 불러오는데 실패했습니다.');
-                }
+    const router = useRouter();
 
-                const data: SearchResponse = await response.json();
-
-                if (data.isSuccess) {
-                    setConcerts(data.result.concertInfoDTOList);
-                } else {
-                    throw new Error(data.message || '검색에 실패했습니다.');
-                }
-            } catch (err) {
-                setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
-                setConcerts([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchSearchResults();
-    }, [searchQuery]);
-
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex justify-center items-center py-20">
                 <div className="text-primary text-lg font-semibold">검색 중...</div>
@@ -73,11 +70,22 @@ export default function SearchResults({ searchQuery }: SearchResultsProps) {
         );
     }
 
-    if (error) {
+    if (isError) {
         return (
             <div className="flex flex-col justify-center items-center py-20">
-                <div className="text-red-500 text-lg font-semibold mb-4">⚠️ {error}</div>
+                <div className="text-red-500 text-lg font-semibold mb-4">
+                    ⚠️ {error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.'}
+                </div>
                 <div className="text-gray-500">다른 키워드로 다시 시도해보세요.</div>
+                {/* 디버깅용 - 개발 환경에서만 표시 */}
+                {process.env.NODE_ENV === 'development' && (
+                    <details className="mt-4 text-sm">
+                        <summary className="cursor-pointer text-gray-400">에러 상세 정보</summary>
+                        <pre className="mt-2 p-2 bg-gray-100 rounded text-xs overflow-auto">
+                            {JSON.stringify(error, null, 2)}
+                        </pre>
+                    </details>
+                )}
             </div>
         );
     }
@@ -115,14 +123,18 @@ export default function SearchResults({ searchQuery }: SearchResultsProps) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 justify-items-center">
                 {concerts.map((concert) => (
-                    <Ticket
-                        key={concert.id}
-                        concert={{
-                            ...concert,
-                            round:
-                                concert.ticketRound === '팬클럽 선예매' || concert.ticketRound === '팬클럽' ? '1' : '2',
-                        }}
-                    />
+                    <div onClick={() => router.push(`concert/${concert.id}`)}>
+                        <Ticket
+                            key={concert.id}
+                            concert={{
+                                ...concert,
+                                round:
+                                    concert.ticketRound === '팬클럽 선예매' || concert.ticketRound === '팬클럽'
+                                        ? '1'
+                                        : '2',
+                            }}
+                        />
+                    </div>
                 ))}
             </div>
         </div>
