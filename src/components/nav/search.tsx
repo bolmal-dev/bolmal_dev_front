@@ -1,11 +1,41 @@
-export default function Search() {
+import { useState } from 'react';
+
+interface SearchInputProps {
+    onSearch: (query: string) => void;
+}
+
+export default function Search({ onSearch }: SearchInputProps) {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchTerm.trim()) {
+            onSearch(searchTerm.trim());
+        }
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleSubmit(e);
+        }
+    };
+
     return (
-        <div className="relative">
+        <form onSubmit={handleSubmit} className="relative">
             <input
                 type="text"
-                className="w-[27.77vw] h-[3.7vh] rounded-[100px] bg-bg-default focus:outline-none focus:border-primary pl-[10px]"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="아티스트나 공연명을 검색하세요"
+                className="w-[27.77vw] h-[3.7vh] rounded-[100px] bg-bg-default focus:outline-none focus:border-primary border-[1px] border-transparent pl-[10px] pr-[50px] placeholder:text-gray-400"
             />
-            <button className="absolute right-4 top-1/2 -translate-y-1/2">🔍</button>
-        </div>
+            <button
+                type="submit"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors"
+            >
+                🔍
+            </button>
+        </form>
     );
 }
