@@ -14,11 +14,6 @@ interface SignUpForm {
     gender: string;
     birth: string;
     email: string;
-    phone: {
-        phone1: string;
-        phone2: string;
-        phone3: string;
-    };
 }
 
 interface ValidationCheckboxProps {
@@ -60,7 +55,6 @@ export default function SignUp() {
                 gender: data.gender,
                 birthDate: data.birth,
                 email: data.email,
-                phoneNumber: `${data.phone.phone1}-${data.phone.phone2}-${data.phone.phone3}`,
                 serviceAgreement: true,
                 privacyAgreement: true,
                 financialAgreement: true,
