@@ -7,6 +7,9 @@ import QueryProvider from '@/components/providers/QueryProvider.tsx';
 export const metadata: Metadata = {
     title: '볼래말래',
     description: '',
+    icons: {
+        icon: '/favicon.ico.svg',
+    },
 };
 
 export default function RootLayout({
