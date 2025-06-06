@@ -211,7 +211,7 @@ yarn format
 ## 👥 팀
 
 -   **Frontend Developer**: [고제성, 박희웅]
--   **Backend Developer**: [전재연, 김민석]
+-   **Backend Developer**: [전재연, 김민석, 함윤]
 -   **Designer**: [김규리, 당현송]
 
 ## 📞 문의
